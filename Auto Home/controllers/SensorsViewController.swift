@@ -17,6 +17,8 @@ import FirebaseFirestore
 
 class SensorsViewController: UIViewController {
     
+    // MARK: - IBOutlets
+    
     @IBOutlet weak var lightsStatus: UILabel!
     @IBOutlet weak var windowStatus: UILabel!
     @IBOutlet weak var hoomDoorStatus: UILabel!
@@ -28,13 +30,17 @@ class SensorsViewController: UIViewController {
     @IBOutlet weak var ldrSensor: UILabel!
     @IBOutlet weak var rainSensor: UILabel!
     @IBOutlet weak var gasSensor: UILabel!
+    
+    // MARK: - Properties
+
     var convStatus = false
     var ref: DatabaseReference!
     let  user = Auth.auth().currentUser
     let db = Firestore.firestore()
     
     
-    
+    // MARK: - View Lifecycle
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +64,9 @@ class SensorsViewController: UIViewController {
         getSensorsData("gas_data")
         getSensorsData("rain_data")
         
+        
+        // if condition to detect if there is a gas in the air
+        
         if (getGasSensor()>700){
             let alert = UIAlertController(title: "Notification", message: "there is a fire watch out!!! ", preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))
@@ -76,6 +85,11 @@ class SensorsViewController: UIViewController {
         
         
     }
+    
+    // MARK: - Helper Methods
+    
+    // function to get the buttons data from rtdb
+
     func getButtonData(_ buttonType : String) {
         
         
@@ -103,6 +117,9 @@ class SensorsViewController: UIViewController {
             print(error.localizedDescription)
         }
     }
+    
+    // function to get the slider angle  from rtdb
+
     func getSliderAngle(_ angle: String){
         ref.child("users").child("home door angle").observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
@@ -123,23 +140,9 @@ class SensorsViewController: UIViewController {
             print(error.localizedDescription)
         }
     }
-    //    func getVoltage(_ voltage: String){
-    //        ref.child("Sensor").observeSingleEvent(of: .value, with: { (snapshot) in
-    //            // Get user value
-    //            let value = snapshot.value as? NSDictionary
-    //            let status = value?[voltage] as? Float
-    //            let voltage = status
-    //            if voltage != nil{
-    //                self.voltage.text = String(format: "%.4f", voltage!)
-    //            }else{
-    //            print("voltage is nil")
-    //            }
-    //
-    //        }) { (error) in
-    //            print(error.localizedDescription)
-    //        }
-    //    }
     
+    
+    // function to get sensors readings from our smart home
     
     func getSensorsData(_ sensorType : String) {
         var sensorResult = 0
@@ -162,6 +165,9 @@ class SensorsViewController: UIViewController {
         }
         
     }
+    
+    // function to get only gas sensor readings from our smart home
+
     func getGasSensor () -> Int{
         
         var sensorResult = 0

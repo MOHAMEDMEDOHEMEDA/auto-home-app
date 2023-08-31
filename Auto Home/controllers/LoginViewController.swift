@@ -11,43 +11,24 @@ import FirebaseAuth
 
 class LoginViewController: UIViewController {
     
+    // MARK: - IBOutlets
     @IBOutlet weak var PasswordTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     
-
-    
-    
+    // MARK: - IBActions
     @IBAction func loginButtonPressed(_ sender: UIButton) {
-        
-                if let email = emailTextField.text, let password = PasswordTextField.text {
-                Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-                    if let e = error {
-                        print(e)
-                    }
-                    else {
-                    
-
-                        self.performSegue(withIdentifier: "loginToMain", sender: self)
-
-        
-                    }
+        // Retrieve email and password from text fields
+        if let email = emailTextField.text, let password = PasswordTextField.text {
+            // Sign in with Firebase Auth
+            Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+                if let e = error {
+                    // Login failed, print error
+                    print(e)
+                } else {
+                    // Login successful, navigate to the Main view
+                    self.performSegue(withIdentifier: "loginToMain", sender: self)
                 }
             }
         }
-        
-        
     }
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
-    
-
+}
